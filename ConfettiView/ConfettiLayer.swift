@@ -143,6 +143,10 @@ class ConfettiLayer {
             view = ParticleImageView(center: point,
                                      depth: decreasedDepth,
                                      image: image)
+        case .silhouette(let image):
+            view = SilhouetteView(center: point,
+                                  depth: depth,
+                                  image: image)
         }
         guard let particleView = view else { return }
         

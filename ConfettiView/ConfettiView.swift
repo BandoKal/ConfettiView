@@ -11,6 +11,7 @@ import UIKit
 public enum ParticleViewType {
     case shape
     case image(image: UIImage)
+    case silhouette(image: UIImage)
 }
 
 open class ConfettiView: UIView {

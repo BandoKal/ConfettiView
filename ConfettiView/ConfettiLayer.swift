@@ -39,8 +39,8 @@ class ConfettiLayer {
     /**
      Initializes a new confetti layer on a designated view.
      - Parameters:
-        - view: The target view where the confetti will be added
-        - depth: Simulates depth feeling using size and speed. Default = 1.0
+     - view: The target view where the confetti will be added
+     - depth: Simulates depth feeling using size and speed. Default = 1.0
      */
     init(view aView:UIView, depth aDepth:Double = 1.0) {
         view = aView
@@ -147,6 +147,10 @@ class ConfettiLayer {
             view = SilhouetteView(center: point,
                                   depth: depth,
                                   image: image)
+        case .string(let text):
+            view = StringView(center: point,
+                              depth: depth,
+                              text: text)
         }
         guard let particleView = view else { return }
         

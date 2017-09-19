@@ -34,6 +34,7 @@ class ConfettiLayer {
     ///The depth that will be simulated by this layer
     var depth:Double
     
+    var particleType: ParticleViewType
     
     /**
      Initializes a new confetti layer on a designated view.
@@ -43,6 +44,7 @@ class ConfettiLayer {
      */
     init(view aView:UIView, depth aDepth:Double = 1.0) {
         view = aView
+        particleType = .shape
         animator = UIDynamicAnimator(referenceView: view)
         calculatedVelocity = baseVelocity
         depth = aDepth
@@ -131,22 +133,30 @@ class ConfettiLayer {
     }
     
     func addParticle(at point:CGPoint) {
-        let shapeView = ShapeView(center: point,depth:self.depth)
+        var view: UIView? = nil
+        switch self.particleType {
+        case .shape:
+            view = ShapeView(center: point,depth: depth)
+        case .image(let image):
+            //Decrease depth for image because the actual image is too small to see 
+            let decreasedDepth = depth - (depth * 0.40)
+            view = ParticleImageView(center: point,
+                                     depth: decreasedDepth,
+                                     image: image)
+        }
+        guard let particleView = view else { return }
         
-        self.view.addSubview(shapeView)
+        self.view.addSubview(particleView)
         let precentage =  Double(arc4random_uniform(UInt32(101)))/100.0
-        shapeView.transform = CGAffineTransform(rotationAngle: CGFloat(M_PI*precentage))
+        particleView.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi * precentage))
         
-        collisions.addItem(shapeView)
-        itemBehavior.addItem(shapeView)
-        itemBehavior.addLinearVelocity(calculatedVelocity, for: shapeView)
+        collisions.addItem(particleView)
+        itemBehavior.addItem(particleView)
+        itemBehavior.addLinearVelocity(calculatedVelocity, for: particleView)
         let spin = Int(arc4random_uniform(UInt32(100)))
         
         if spin > 80 {
-            itemBehavior.addAngularVelocity(CGFloat(M_PI), for: shapeView)
+            itemBehavior.addAngularVelocity(CGFloat.pi, for: particleView)
         }
-        
     }
-    
-    
 }

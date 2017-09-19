@@ -8,9 +8,30 @@
 
 import UIKit
 
-open class ConfettiView: UIView {
+public enum ParticleViewType {
+    case shape
+    case image(image: UIImage)
+}
 
+open class ConfettiView: UIView {
+    
     open var isAnimating = true
+    
+    public var topLayerParticleType = ParticleViewType.shape {
+        didSet {
+            confettiLayers[0].particleType = topLayerParticleType
+        }
+    }
+    public var middleLayerParticleType = ParticleViewType.shape {
+        didSet {
+            confettiLayers[1].particleType = middleLayerParticleType
+        }
+    }
+    public var bottomLayerParticleType = ParticleViewType.shape {
+        didSet {
+            confettiLayers[2].particleType = bottomLayerParticleType
+        }
+    }
     
     // MARK: Declarations
     var confettiLayers = [ConfettiLayer]()
@@ -26,7 +47,6 @@ open class ConfettiView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addConfetti()
-        
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -34,14 +54,12 @@ open class ConfettiView: UIView {
         addConfetti()
     }
     
-    
     // MARK: Confetti Methods
     private func addConfetti() {
-        self.confettiLayers.append(ConfettiLayer(view: self))
+        self.confettiLayers.append(ConfettiLayer(view: self, depth: 0.85))
         self.confettiLayers.append(ConfettiLayer(view: self, depth: 1.5))
-        self.confettiLayers.append(ConfettiLayer(view: self, depth: 2))
+        self.confettiLayers.append(ConfettiLayer(view: self, depth: 2.0))
     }
-    
     
     // MARK: Touches
     override  open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

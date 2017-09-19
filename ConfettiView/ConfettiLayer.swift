@@ -147,10 +147,13 @@ class ConfettiLayer {
             view = SilhouetteView(center: point,
                                   depth: depth,
                                   image: image)
-        case .string(let text):
-            view = StringView(center: point,
-                              depth: depth,
-                              text: text)
+//        case .string(let text):
+//            view = StringView(center: point,
+//                              depth: depth,
+//                              text: text)
+        case .randomEmoji:
+            view = EmojiView(center: point,
+                             depth: depth)
         }
         guard let particleView = view else { return }
         

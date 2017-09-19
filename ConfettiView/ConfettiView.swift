@@ -12,7 +12,8 @@ public enum ParticleViewType {
     case shape
     case image(image: UIImage)
     case silhouette(image: UIImage)
-    case string(text: String)
+//    case string(text: String) //More work to do with string... Problems when you have more than one.
+    case randomEmoji
 }
 
 open class ConfettiView: UIView {

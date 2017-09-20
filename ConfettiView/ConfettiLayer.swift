@@ -68,8 +68,14 @@ class ConfettiLayer {
         itemBehavior.allowsRotation = true
         itemBehavior.friction = 0.0
         itemBehavior.resistance = 0
-        itemBehavior.elasticity = 0
-        
+        itemBehavior.elasticity = 0.0
+        itemBehavior.density = 0.1
+        if #available(iOS 9.0, *) {
+            itemBehavior.charge = 20
+            
+        } else {
+            // Fallback on earlier versions
+        }
         
         animator.addBehavior(itemBehavior)
         animator.addBehavior(collisions)
@@ -80,6 +86,14 @@ class ConfettiLayer {
         collisions.addBoundary(withIdentifier: "left" as NSCopying, from: CGPoint(x:0,y:0), to: CGPoint(x:0,y:self.view.bounds.size.height))
         collisions.addBoundary(withIdentifier: "right" as NSCopying, from: CGPoint(x:self.view.bounds.size.width,y:0), to: CGPoint(x:self.view.bounds.size.width,y:self.view.bounds.size.height))
         
+    }
+    
+    func createBoundary(at location: CGPoint) {
+        
+        collisions.removeBoundary(withIdentifier: "touch" as NSCopying)
+        let rect = CGRect(x: (location.x - 40.0), y: (location.y - 40.0), width: 80.0, height: 50.0)
+        let path = UIBezierPath(ovalIn: rect)
+        collisions.addBoundary(withIdentifier: "touch" as NSCopying, for: path)
     }
     
     func setupTimerLoop() {
@@ -147,10 +161,10 @@ class ConfettiLayer {
             view = SilhouetteView(center: point,
                                   depth: depth,
                                   image: image)
-//        case .string(let text):
-//            view = StringView(center: point,
-//                              depth: depth,
-//                              text: text)
+        case .string(let text):
+            view = StringView(center: point,
+                              depth: depth,
+                              text: text)
         case .randomEmoji:
             view = EmojiView(center: point,
                              depth: depth)

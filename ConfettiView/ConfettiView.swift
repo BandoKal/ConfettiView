@@ -12,7 +12,7 @@ public enum ParticleViewType {
     case shape
     case image(image: UIImage)
     case silhouette(image: UIImage)
-//    case string(text: String) //More work to do with string... Problems when you have more than one.
+        case string(text: String) //More work to do with string... Problems when you have more than one.
     case randomEmoji
 }
 
@@ -66,11 +66,27 @@ open class ConfettiView: UIView {
     
     // MARK: Touches
     override  open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if #available(iOS 9.1, *) {
+            if let loc = touches.first?.preciseLocation(in: self){
+                confettiLayers.forEach{ layer in layer.createBoundary(at: loc) }
+                
+            }
+        } else {
+            // Fallback on earlier versions
+        }
     }
     override  open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+            if #available(iOS 9.1, *) {
+                if let loc = touches.first?.preciseLocation(in: self) {
+                    confettiLayers.forEach{ layer in layer.createBoundary(at: loc) }
+            }
+        }
     }
+    
+    
     override  open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        confettiLayers.forEach{ layer in layer.collisions.removeBoundary(withIdentifier: "touch" as NSCopying)
+        }
     }
     
     // MARK: Controls

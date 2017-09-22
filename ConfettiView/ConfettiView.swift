@@ -66,27 +66,10 @@ open class ConfettiView: UIView {
     
     // MARK: Touches
     override  open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if #available(iOS 9.1, *) {
-            if let loc = touches.first?.preciseLocation(in: self){
-                confettiLayers.forEach{ layer in layer.createBoundary(at: loc) }
-                
-            }
-        } else {
-            // Fallback on earlier versions
-        }
     }
     override  open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-            if #available(iOS 9.1, *) {
-                if let loc = touches.first?.preciseLocation(in: self) {
-                    confettiLayers.forEach{ layer in layer.createBoundary(at: loc) }
-            }
-        }
     }
-    
-    
     override  open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        confettiLayers.forEach{ layer in layer.collisions.removeBoundary(withIdentifier: "touch" as NSCopying)
-        }
     }
     
     // MARK: Controls

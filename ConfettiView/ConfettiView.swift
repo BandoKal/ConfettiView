@@ -64,14 +64,6 @@ open class ConfettiView: UIView {
         self.confettiLayers.append(ConfettiLayer(view: self, depth: 2.0))
     }
     
-    // MARK: Touches
-    override  open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    override  open func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    override  open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    }
-    
     // MARK: Controls
     
     /// Stops the animation of all layers

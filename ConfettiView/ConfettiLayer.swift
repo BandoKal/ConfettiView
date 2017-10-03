@@ -27,7 +27,7 @@ class ConfettiLayer {
     
     // TODO: create a struct to represent the layer state
     // Initial layer state
-    var baseVelocity = CGPoint(x:0,y:200.0)
+    var baseVelocity = CGPoint(x:0.0, y:200.0)
     var calculatedVelocity:CGPoint
     var totalTilt = 1.0
     
@@ -112,11 +112,41 @@ class ConfettiLayer {
         
     }
     
+    
+    
     func updateCurrentState(_ accelerometerData:CMAccelerometerData?)  {
+        let currentOrientation = UIDevice.current.orientation
         //Calculating the new velocity of the items according to the tilt of the device
         if let accelerometerData = accelerometerData {
-            self.totalTilt = -accelerometerData.acceleration.y
-            self.calculatedVelocity = CGPoint(x: self.baseVelocity.x + CGFloat(accelerometerData.acceleration.x * 200 / self.depth), y:  CGFloat(-accelerometerData.acceleration.y*300 / self.depth))
+            // Up       x = (x * 200/d) ; y = bY + (-y * 300/d)
+            // Down     x = (x * 200/d) ; y = -(bY + (-x * 300/d))
+            // Left     x = (-y * 200/d) ; y = bY + (-x * 300/d)
+            // Right    x = (-y * 200/d) ; y = -(bY + (-y * 300/d))
+            var changeInX: CGFloat = 0.0
+            var changeInY: CGFloat = 0.0
+            switch currentOrientation {
+            case .portrait:
+                totalTilt = -accelerometerData.acceleration.y
+                changeInX = CGFloat(accelerometerData.acceleration.x * 200 / self.depth)
+                changeInY = (self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.y * 300 / self.depth))
+            case .portraitUpsideDown:
+                totalTilt = accelerometerData.acceleration.y
+                changeInX = CGFloat(accelerometerData.acceleration.x * 200 / self.depth)
+                changeInY = -(self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.y * 300 / self.depth))
+            case .landscapeLeft:
+                totalTilt = -accelerometerData.acceleration.x
+                changeInX = CGFloat(-accelerometerData.acceleration.y * 200 / self.depth)
+                changeInY = (self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.x * 300 / self.depth))
+            case .landscapeRight:
+                totalTilt = accelerometerData.acceleration.x
+                changeInX = CGFloat(-accelerometerData.acceleration.y * 200 / self.depth)
+                changeInY = self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.y * 300 / self.depth)
+            default:
+                changeInX = 0.0
+                changeInY = 0.0
+            }
+            self.calculatedVelocity = CGPoint(x: changeInX,
+                                              y: changeInY)
         }
         self.itemBehavior.items.forEach{ item in
             

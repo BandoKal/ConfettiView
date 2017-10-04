@@ -127,8 +127,8 @@ class ConfettiLayer {
             switch currentOrientation {
             case .portrait:
                 totalTilt = -accelerometerData.acceleration.y
-                changeInX = CGFloat(accelerometerData.acceleration.x * 200 / self.depth)
-                changeInY = (self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.y * 300 / self.depth))
+                changeInX = self.baseVelocity.x + CGFloat(accelerometerData.acceleration.x * 200 / self.depth)
+                changeInY = CGFloat(-accelerometerData.acceleration.y * 300 / self.depth)
             case .portraitUpsideDown:
                 totalTilt = accelerometerData.acceleration.y
                 changeInX = CGFloat(accelerometerData.acceleration.x * 200 / self.depth)

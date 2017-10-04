@@ -142,8 +142,9 @@ class ConfettiLayer {
                 changeInX = CGFloat(-accelerometerData.acceleration.y * 200 / self.depth)
                 changeInY = self.baseVelocity.y + CGFloat(-accelerometerData.acceleration.y * 300 / self.depth)
             default:
-                changeInX = 0.0
-                changeInY = 0.0
+                totalTilt = -accelerometerData.acceleration.y
+                changeInX = self.baseVelocity.x + CGFloat(accelerometerData.acceleration.x * 200 / self.depth)
+                changeInY = CGFloat(-accelerometerData.acceleration.y * 300 / self.depth)
             }
             self.calculatedVelocity = CGPoint(x: changeInX,
                                               y: changeInY)
